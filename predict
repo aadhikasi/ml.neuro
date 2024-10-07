@@ -1,0 +1,43 @@
+import pandas as pd
+
+# Example hypothetical dataset
+data = {
+    'diet_quality': [5, 3, 4, 2, 5],
+    'exercise_hours': [3, 1, 2, 0, 4],
+    'stress_level': [2, 5, 3, 4, 1],
+    'neurotransmitter_level': [100, 80, 90, 70, 110]
+}
+
+df = pd.DataFrame(data)
+# Check for missing values
+print(df.isnull().sum())
+
+# Split features and target
+X = df[['diet_quality', 'exercise_hours', 'stress_level']]
+y = df['neurotransmitter_level']
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Linear Regression model
+model = LinearRegression()
+
+# Train the model
+model.fit(X_train, y_train)
+# Predict neurotransmitter levels
+predictions = model.predict(X_test)
+
+# Output predictions
+for i, pred in enumerate(predictions):
+    print(f'Predicted level for test sample {i+1}: {pred}')
+import matplotlib.pyplot as plt
+
+# Plotting the predictions against actual values
+plt.scatter(y_test, predictions)
+plt.xlabel('Actual Neurotransmitter Levels')
+plt.ylabel('Predicted Neurotransmitter Levels')
+plt.title('Actual vs. Predicted Neurotransmitter Levels')
+plt.plot([min(y_test), max(y_test)], [min(y_test), max(y_test)], color='red', linestyle='--')  # Diagonal line
+plt.show()
